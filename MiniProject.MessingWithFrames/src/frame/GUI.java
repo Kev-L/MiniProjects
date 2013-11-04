@@ -3,6 +3,11 @@ package frame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.*;
@@ -24,21 +29,50 @@ public class GUI {
 	}
 	
 	
-	public void setLabel(){
+	public ArrayList<String> readFile(){
+		ArrayList<String> list = new ArrayList<String>();
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader("Files/letter.txt"));
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				String[] parts = line.split("\\s");
+				for(String s : parts){
+					list.add(s);
+				}
+			}
 		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	public void setLabel(){
+		final ArrayList<String> letter = readFile();
 		label1.addKeyListener(new KeyListener(){
 			String text="";
+			String text1;
 			Random n = new Random();
 			int x;
 			@Override
 			public void keyPressed(KeyEvent e) {
-				x = n.nextInt()%10+1;
-				if(x<7&&x>3)
-					text = text +"<br>";
-				for(int i = 0;i<x;i++){
-					text = text + " blah";
+					x = n.nextInt()%5+1;
+				for(int i = 0;i<=x;i++){
+					text = text + letter.toString();
+					text1 = text.replace(',' ,' ');
+					if(text1.contains("\n")){
+						System.out.println("foundit");
+					}
 				}
-				label1.setText("<html>"+text+"</html>");
+				//System.out.println(text1);
+				label1.setText("<html>"+text1+"</html>");
+				
 			}
 
 			@Override
